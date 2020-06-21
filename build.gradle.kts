@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.ow2.asm:asm:8.0.1")
     antlr("org.antlr:antlr4:4.5")
     testImplementation("junit", "junit", "4.12")
     testImplementation("io.mockk:mockk:1.9.3")

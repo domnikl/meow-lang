@@ -2,7 +2,10 @@ package org.meow
 
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CommonTokenStream
+import org.meow.compiler.CompilerVisitor
+import java.io.File
 import java.io.FileInputStream
+import java.io.FileOutputStream
 import kotlin.system.exitProcess
 
 fun main(argv: Array<String>) {
@@ -31,4 +34,11 @@ fun main(argv: Array<String>) {
     println(ast)
 
     // TODO: call compiler
+    val byteCode = CompilerVisitor().visitCompileUnit(ast)
+
+    val output = FileOutputStream(File("Test.class"))
+    output.write(byteCode)
+
+
+
 }
