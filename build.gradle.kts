@@ -14,7 +14,8 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     antlr("org.antlr:antlr4:4.5")
-    testCompile("junit", "junit", "4.12")
+    testImplementation("junit", "junit", "4.12")
+    testImplementation("io.mockk:mockk:1.9.3")
 }
 
 configure<JavaPluginConvention> {
@@ -31,5 +32,5 @@ tasks {
 }
 
 tasks.generateGrammarSource {
-    arguments = arguments + listOf("-visitor", "-long-messages")
+    arguments = arguments + listOf("-visitor", "-long-messages", "-package", "org.meow")
 }
