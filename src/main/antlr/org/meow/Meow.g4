@@ -4,9 +4,11 @@ grammar Meow;
  * Parser rules
  */
 
-compileUnit : (expr | COMMENT | LINE_COMMENT | NEWLINE)* DELIMITER*;
+compileUnit : (expr | defineValue | COMMENT | LINE_COMMENT | NEWLINE)* DELIMITER*;
 
 expr : value=INTEGER_LITERAL # integerLiteralExpr ;
+
+defineValue : KEYWORD_LET IDENTIFIER ASSIGNMENT_OPERATOR expr ;
 
 /*
  * Lexer rules
@@ -16,6 +18,9 @@ fragment LOWERCASE : [a-z] ;
 fragment UPPERCASE : [A-Z] ;
 fragment LETTER    : [a-zA-Z] ;
 fragment DIGIT     : [0-9] ;
+
+KEYWORD_LET         : 'let' ;
+ASSIGNMENT_OPERATOR : '=' ;
 
 WHITESPACE      : (' ' | '\t')+ -> skip ;
 NEWLINE         : ('\r'? '\n' | '\r')+ -> skip;

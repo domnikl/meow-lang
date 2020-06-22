@@ -2,7 +2,7 @@ package org.meow
 
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CommonTokenStream
-import org.meow.compiler.CompilerVisitor
+import org.meow.compiler.Compiler
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -14,14 +14,15 @@ fun main(argv: Array<String>) {
         exitProcess(1)
     }
 
-    val stream = ANTLRInputStream(FileInputStream(argv[0]))
-    val lexer = org.meow.MeowLexer(stream);
+    val inputFile = File(argv[0])
+    val stream = ANTLRInputStream(FileInputStream(inputFile))
+    val lexer = MeowLexer(stream);
 
     // TODO: error handling!
     //lexer.removeErrorListeners()
     //lexer.addErrorListener(ErrorListener)
 
-    val parser = org.meow.MeowParser(CommonTokenStream(lexer))
+    val parser = MeowParser(CommonTokenStream(lexer))
 
     // TODO: error handling!
     //parser.removeErrorListeners()
@@ -33,12 +34,9 @@ fun main(argv: Array<String>) {
     // TODO: option to print AST
     println(ast)
 
-    // TODO: call compiler
-    val byteCode = CompilerVisitor().visitCompileUnit(ast)
+    val className = inputFile.nameWithoutExtension
+    val outputFile = inputFile.parentFile.resolve("${className}.class")
+    val byteCode = Compiler(className).compile(ast)
 
-    val output = FileOutputStream(File("Test.class"))
-    output.write(byteCode)
-
-
-
+    FileOutputStream(outputFile).write(byteCode)
 }

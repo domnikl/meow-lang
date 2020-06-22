@@ -29,6 +29,8 @@ class MeowLexerTest {
     @Test
     fun tokens() {
         val tokens = mapOf(
+            "let" to MeowLexer.KEYWORD_LET,
+            "=" to MeowLexer.ASSIGNMENT_OPERATOR,
             " " to -1,
             "\n" to -1,
             "\r" to -1,

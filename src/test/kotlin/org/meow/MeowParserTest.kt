@@ -17,6 +17,20 @@ class MeowParserTest {
         assert(parser.compileUnit().children[0] is MeowParser.IntegerLiteralExprContext)
     }
 
+    @Test
+    fun defineValue() {
+        val parser = createParserNoError(
+            listOf(
+                TestToken("let", MeowLexer.KEYWORD_LET),
+                TestToken("x", MeowLexer.IDENTIFIER),
+                TestToken("=", MeowLexer.ASSIGNMENT_OPERATOR),
+                TestToken("1", MeowLexer.INTEGER_LITERAL)
+            )
+        )
+
+        assert(parser.compileUnit().children[0] is MeowParser.DefineValueContext)
+    }
+
     private fun createParserNoError(tokens: List<TestToken>): MeowParser {
         return MeowParser(CommonTokenStream(ListTokenSource(tokens))).also { it.addErrorListener(NoErrorListener) }
     }

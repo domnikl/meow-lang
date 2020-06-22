@@ -1,6 +1,9 @@
 // # Meow examples
-// ## basic integer arithmetic
+// This is a list of expressions that Meow is able to perform.
+// You can actually compile that into a .class and run it in the JVM.
 
-300
-200
-100; 4
+// ## defining values
+// All values in Meow can be defined with the 'let' keyword like this:
+
+let x = 1
+let y = 42
