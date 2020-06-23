@@ -37,25 +37,31 @@ class Compiler(private val className: String) {
             "java/lang/Object",
             null
         )
-    }
 
-    fun finishFile() {
         // static main
         mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null)
         mv.visitCode()
+    }
 
-        // TODO: remove printing every created value ...
-        values.forEach { (name, type) ->
-            mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-            mv.visitFieldInsn(GETSTATIC, className, name, type.identifier)
-            mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(${type.identifier})V", false);
-        }
-
+    fun finishFile() {
         mv.visitInsn(RETURN);
         mv.visitMaxs(0, 0);
         mv.visitEnd();
 
         cw.visitEnd()
+    }
+
+    fun addFunctionCall(name: String, args: List<Pair<Int, Descriptor>>) {
+        if (name == "printLine" && args.size == 1 && args[0].second == Descriptor.INTEGER) {
+            args.forEach { (value, type) ->
+                mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+                // TODO: this is for integers only
+                mv.visitIntInsn(SIPUSH, value)
+                mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(${type.identifier})V", false);
+            }
+        } else {
+            throw IllegalArgumentException("Unknown function $name(${args.joinToString(",") { it.second.identifier }})")
+        }
     }
 
     enum class Descriptor(val identifier: String) {

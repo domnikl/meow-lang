@@ -18,6 +18,36 @@ class MeowParserTest {
     }
 
     @Test
+    fun funcCallExpr() {
+        val x = listOf(
+            listOf(
+                TestToken("printLine", MeowLexer.IDENTIFIER),
+                TestToken("(", MeowLexer.L_PARENS),
+                TestToken("1", MeowLexer.INTEGER_LITERAL),
+                TestToken(")", MeowLexer.R_PARENS)
+            ),
+            listOf(
+                TestToken("printLine", MeowLexer.IDENTIFIER),
+                TestToken("(", MeowLexer.L_PARENS),
+                TestToken("1", MeowLexer.INTEGER_LITERAL),
+                TestToken(",", MeowLexer.T__0),
+                TestToken("1", MeowLexer.INTEGER_LITERAL),
+                TestToken(")", MeowLexer.R_PARENS)
+            ),
+            listOf(
+                TestToken("printLine", MeowLexer.IDENTIFIER),
+                TestToken("(", MeowLexer.L_PARENS),
+                TestToken(")", MeowLexer.R_PARENS)
+            )
+        )
+
+        x.forEach {
+            val parser = createParserNoError(it)
+            assert(parser.expr() is MeowParser.FuncCallExprContext)
+        }
+    }
+
+    @Test
     fun defineValue() {
         val parser = createParserNoError(
             listOf(

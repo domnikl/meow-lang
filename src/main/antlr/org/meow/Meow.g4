@@ -4,9 +4,13 @@ grammar Meow;
  * Parser rules
  */
 
-compileUnit : (expr | defineValue | COMMENT | LINE_COMMENT | NEWLINE)* DELIMITER*;
+compileUnit : (expr | defineValue | COMMENT | LINE_COMMENT | NEWLINE)* DELIMITER* ;
 
-expr : value=INTEGER_LITERAL # integerLiteralExpr ;
+expr : identifier=IDENTIFIER L_PARENS exprList R_PARENS # funcCallExpr
+     | value=INTEGER_LITERAL                            # integerLiteralExpr
+;
+
+exprList   : (expr (',' expr)* )? ;
 
 defineValue : KEYWORD_LET IDENTIFIER ASSIGNMENT_OPERATOR expr ;
 
@@ -20,7 +24,10 @@ fragment LETTER    : [a-zA-Z] ;
 fragment DIGIT     : [0-9] ;
 
 KEYWORD_LET         : 'let' ;
+
 ASSIGNMENT_OPERATOR : '=' ;
+L_PARENS            : '(' ;
+R_PARENS            : ')' ;
 
 WHITESPACE      : (' ' | '\t')+ -> skip ;
 NEWLINE         : ('\r'? '\n' | '\r')+ -> skip;

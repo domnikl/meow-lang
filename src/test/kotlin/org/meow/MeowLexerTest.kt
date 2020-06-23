@@ -31,6 +31,8 @@ class MeowLexerTest {
         val tokens = mapOf(
             "let" to MeowLexer.KEYWORD_LET,
             "=" to MeowLexer.ASSIGNMENT_OPERATOR,
+            "(" to MeowLexer.L_PARENS,
+            ")" to MeowLexer.R_PARENS,
             " " to -1,
             "\n" to -1,
             "\r" to -1,

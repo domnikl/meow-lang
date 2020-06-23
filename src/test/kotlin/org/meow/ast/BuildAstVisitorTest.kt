@@ -27,6 +27,26 @@ class BuildAstVisitorTest {
         assertEquals(value, visitor.visitDefineValue(ctx).value)
     }
 
+    @Test
+    fun canBuildAstForFunctionCall() {
+        val arg1 = createSimpleNumberExprContext(42)
+        val arg2 = createSimpleNumberExprContext(21)
+
+        val ctx = mockk<MeowParser.FuncCallExprContext>()
+        ctx.identifier = mockk()
+
+        every { ctx.identifier.text } returns "printLine"
+        every { ctx.exprList().expr() } returns listOf(arg1, arg2)
+
+        val expected = listOf(
+            IntegerLiteralExpressionNode(42),
+            IntegerLiteralExpressionNode(21)
+        )
+
+        assertEquals("printLine", visitor.visitFuncCallExpr(ctx).name)
+        assertEquals(expected, visitor.visitFuncCallExpr(ctx).args)
+    }
+
     private fun createSimpleNumberExprContext(value: Int): MeowParser.IntegerLiteralExprContext {
         val ctx = mockk<MeowParser.IntegerLiteralExprContext>()
         every { ctx.text } returns value.toString()
